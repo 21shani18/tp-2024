@@ -15,6 +15,7 @@ def login_page(request):
 
 # auxiliar: retorna 2 listados -> uno de las imágenes de la API y otro de los favoritos del usuario.
 def getAllImagesAndFavouriteList(request):
+   
    images = services_nasa_image_gallery.getAllImages()
    
    
@@ -27,7 +28,7 @@ def getAllImagesAndFavouriteList(request):
 def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
     # (*) este último, solo si se desarrolló el opcional de favoritos; caso contrario, será un listado vacío [].
-    fetchImagesAndFavourites = getAllImagesAndFavouriteList(request)
+   
     
     images,favourite_list=getAllImagesAndFavouriteList(request)
 
@@ -36,18 +37,20 @@ def home(request):
 
 # función utilizada en el buscador.
 def search(request):
-    images, favourite_list = getAllImagesAndFavouriteList(request)
-    search_msg = request.POST.get('query', ''),favourite_list
+ # Obtén el mensaje de búsqueda del POST request  
+     images, favourite_list = getAllImagesAndFavouriteList(request)
+     search_msg = request.POST.get('query', '')
     
 
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-    pass
+     
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-    if not search_msg:
+     if not search_msg:
         return redirect('nombre_de_la_url_a_redirigir')
-    filtered_images = [image for image in images if search_msg.lower() in image.title.lower()]
-    return render(request, 'search_results.html', {'images': filtered_images})
+     filtered_images = [image for image in images if search_msg.lower() in image.title.lower()]
+     return render(request, 'search_results.html', {'images': filtered_images})
 
+   
 
 # las siguientes funciones se utilizan para implementar la sección de favoritos: traer los favoritos de un usuario, guardarlos, eliminarlos y desloguearse de la app.
 @login_required

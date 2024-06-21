@@ -45,7 +45,7 @@ def getAllFavouritesByUser(request):
     else:
         user = get_user(request)
 
-        favourite_list = repositories.getAllFavourites(user) # buscamos desde el repositorio TODOS los favoritos del usuario (variable 'user').
+        favourite_list = repositories.getAllFavouritesByUser(user) # buscamos desde el repositorio TODOS los favoritos del usuario (variable 'user').
         mapped_favourites = []
 
         for favourite in favourite_list:
@@ -60,3 +60,4 @@ def deleteFavourite(request):
     #return repositories.deleteFavourite(favId) # borramos un favorito por su ID.
     favId = request.POST.get('id')
     return repositories.deleteFavourite(favId) # borramos un favorito por su ID.
+
