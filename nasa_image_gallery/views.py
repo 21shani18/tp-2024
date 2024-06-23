@@ -66,9 +66,9 @@ def search(request):
         # Si no se proporcionó una palabra clave, obtén todas las imágenes  
         images = services_nasa_image_gallery.getAllImages()  
 
-    # Convierte cada imagen a un formato que tu template pueda entender  
-    images = [fromRequestIntoNASACard(api_image) for api_image in images]  
-
+    # Convierte cada imagen a un formato que tu template pueda entender
+    #images = [fromRequestIntoNASACard(api_image) for api_image in images]
+    
     # Obtén la lista de imágenes favoritas del usuario  
     favourite_list = []  
 
