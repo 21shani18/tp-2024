@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 from .layers.services import services_nasa_image_gallery
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-
+from .layers.generic.mapper import fromRequestIntoNASACard
 # función que invoca al template del índice de la aplicación.
 def index_page(request):
     return render(request, 'index.html')
@@ -17,10 +17,15 @@ def login_page(request):
 # auxiliar: retorna 2 listados -> uno de las imágenes de la API y otro de los favoritos del usuario.
 def getAllImagesAndFavouriteList(request):
    
-   images = services_nasa_image_gallery.getAllImages()
    
+   favourite_list = []
+
+    # con el mapper transformamos el json en una estructura que el html pueda leer
+   images = []  
+   for api_image in services_nasa_image_gallery.getAllImages:  
+        image = fromRequestIntoNASACard(api_image)  
+        images.append(image)  
    
-   favourite_list = services_nasa_image_gallery.getAllFavouritesByUser(request)if request.user.is_authenticated else[]
 
    return images, favourite_list   
 
@@ -53,15 +58,21 @@ def search(request):
 
  # Obtén el mensaje de búsqueda del POST request  
     
-    
+    search_msg = request.POST.get('query', None)
+    if search_msg is not None and search_msg != '':  
+        # Si se proporcionó una palabra clave, obtén las imágenes que coinciden con esa palabra clave  
+        images = services_nasa_image_gallery.getAllImages(input=search_msg)  
+    else:  
+        # Si no se proporcionó una palabra clave, obtén todas las imágenes  
+        images = services_nasa_image_gallery.getAllImages()  
 
+    # Convierte cada imagen a un formato que tu template pueda entender  
+    images = [fromRequestIntoNASACard(api_image) for api_image in images]  
 
-    images, favourite_list = getAllImagesAndFavouriteList(request)
-    search_msg = request.POST.get('query', '')
-    if not search_msg:
-        return redirect('nombre_de_la_url_a_dirigir')
-    filtered_images = [image for image in images if search_msg.lower() in image.title.lower()]
-    return render (request,'search_results.html', {'images':filtered_images})
+    # Obtén la lista de imágenes favoritas del usuario  
+    favourite_list = []  
+
+    return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list})  
 
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
      
