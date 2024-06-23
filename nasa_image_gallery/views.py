@@ -10,7 +10,7 @@ from django.contrib.auth import logout
 def index_page(request):
     return render(request, 'index.html')
 def login_page(request):
-<<<<<<< HEAD
+
         return render(request, 'registration/login.html')
 
 
@@ -23,55 +23,50 @@ def getAllImagesAndFavouriteList(request):
    favourite_list = services_nasa_image_gallery.getAllFavouritesByUser(request)if request.user.is_authenticated else[]
 
    return images, favourite_list   
-=======
-    return render(request, 'registration/login.html')
+
+   
 
 # auxiliar: retorna 2 listados -> uno de las imágenes de la API y otro de los favoritos del usuario.
 def getAllImagesAndFavouriteList(request):
     images = services_nasa_image_gallery.getAllImages
     favourite_list = services_nasa_image_gallery.getAllFavouritesByUser(request) if request.user.is_authenticated else [] 
     return images, favourite_list
->>>>>>> 9db2d5d53ab831c73b86cc1f11b1ec1a00228d2a
+
 
 
 # función principal de la galería.
 def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
     # (*) este último, solo si se desarrolló el opcional de favoritos; caso contrario, será un listado vacío [].
-<<<<<<< HEAD
+
    
     
+
+
     images,favourite_list=getAllImagesAndFavouriteList(request)
 
-=======
-    images,favourite_list=getAllImagesAndFavouriteList(request)
->>>>>>> 9db2d5d53ab831c73b86cc1f11b1ec1a00228d2a
     return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list} )
 
 
 # función utilizada en el buscador.
 def search(request):
-<<<<<<< HEAD
+
  # Obtén el mensaje de búsqueda del POST request  
-     images, favourite_list = getAllImagesAndFavouriteList(request)
-     search_msg = request.POST.get('query', '')
+    
     
 
-=======
+
     images, favourite_list = getAllImagesAndFavouriteList(request)
     search_msg = request.POST.get('query', '')
     if not search_msg:
         return redirect('nombre_de_la_url_a_dirigir')
     filtered_images = [image for image in images if search_msg.lower() in image.title.lower()]
     return render (request,'search_results.html', {'images':filtered_images})
->>>>>>> 9db2d5d53ab831c73b86cc1f11b1ec1a00228d2a
+
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
      
     # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
-     if not search_msg:
-        return redirect('nombre_de_la_url_a_redirigir')
-     filtered_images = [image for image in images if search_msg.lower() in image.title.lower()]
-     return render(request, 'search_results.html', {'images': filtered_images})
+    
 
    
 
@@ -97,8 +92,8 @@ def deleteFavourite(request):
 @login_required
 def exit(request):
     logout(request)
-<<<<<<< HEAD
+
     return redirect('home')
-=======
-    return redirect ('home')
->>>>>>> 9db2d5d53ab831c73b86cc1f11b1ec1a00228d2a
+
+    
+
